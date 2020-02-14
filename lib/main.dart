@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:personal_expense/widgets/transaction_list.dart';
+import 'models/chart_model.dart';
+import 'widgets/chart.dart';
+import 'widgets/transaction_list.dart';
 
 import 'widgets/new_transaction.dart';
 import 'models/transaction.dart';
@@ -11,6 +13,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.cyan,
+        accentColor: Colors.amber
+      ),
       title: 'Personal expense',
       home: MyHomePage(),
     );
@@ -25,10 +31,23 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [
     Transaction(
-        id: 't1', title: 'Buy grocery', amount: 20.99, date: DateTime.now()),
+        id: 't1', title: 'Buy grocery', amount: 10, date: DateTime.now()),
     Transaction(
-        id: 't2', title: 'Go to wedding', amount: 300, date: DateTime.now())
+        id: 't2', title: 'Go to wedding', amount: 50, date: DateTime.now().subtract(Duration(days: 1))),
+    Transaction(
+        id: 't3', title: 'Buy toys', amount: 20.22, date: DateTime.now().subtract(Duration(days: 1))),
+    Transaction(
+        id: 't4', title: 'Meeting with christ Pho', amount: 30, date: DateTime.now().subtract(Duration(days: 4))),
+    Transaction(
+        id: 't5', title: 'Go to wedding', amount: 59.55, date: DateTime.now().subtract(Duration(days: 5))),
   ];
+
+  List<Transaction> get _recent7DaysTransaction {
+    return _transactions.where(
+        (t) => t.date.isAfter(DateTime.now().subtract(Duration(days: 7)))).toList();
+  }
+
+  final _chartModel = ChartModel();
 
   void addNewTransaction(String title, double amount) {
     final newTransaction = Transaction(
@@ -69,12 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(
-                width: double.infinity,
-                child: Card(
-                  color: Colors.blue,
-                  child: Text('top'),
-                )),
+            Chart(_chartModel.generateChartData(_recent7DaysTransaction)),
             TransactionList(_transactions),
           ],
         ),

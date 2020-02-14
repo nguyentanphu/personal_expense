@@ -12,42 +12,57 @@ class TransactionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 300,
-      child: ListView(
-          children: _transactions
-              .map((t) => Card(
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 15),
-                          decoration: BoxDecoration(
-                              border:
-                                  Border.all(width: 2, color: Colors.purple)),
-                          padding: EdgeInsets.all(10),
-                          child: Text(
-                            '\$${t.amount}',
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.purple),
-                          ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+      child: _transactions.isEmpty
+          ? Column(
+              children: <Widget>[
+                Text('You have no transactions!', style: Theme.of(context).textTheme.title,),
+                SizedBox(height: 20,),
+                Container(
+                  height: 200,
+                  child: Image.asset(
+                    'assets/images/waiting.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ],
+            )
+          : ListView(
+              children: _transactions
+                  .map((t) => Card(
+                        child: Row(
                           children: <Widget>[
-                            Text(
-                              t.title,
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            Container(
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 15),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 2, color: Colors.purple)),
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                '\$${t.amount}',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.purple),
+                              ),
                             ),
-                            Text(DateFormat('dd/MM/yyyy').format(t.date))
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  t.title,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(DateFormat('dd/MM/yyyy').format(t.date))
+                              ],
+                            )
                           ],
-                        )
-                      ],
-                    ),
-                  ))
-              .toList()),
+                        ),
+                      ))
+                  .toList()),
     );
   }
 }
