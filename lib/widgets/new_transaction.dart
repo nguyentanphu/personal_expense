@@ -1,19 +1,34 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../models/funcs.dart';
 
 class NewTransaction extends StatefulWidget {
-  final VoidStringDoubleFunc _addHandler;
-  NewTransaction(VoidStringDoubleFunc addHandler) : _addHandler = addHandler;
+  final VoidStringDoubleDateFunc _addHandler;
+  NewTransaction(VoidStringDoubleDateFunc addHandler) : _addHandler = addHandler;
 
   @override
   _NewTransactionState createState() => _NewTransactionState();
 }
 
 class _NewTransactionState extends State<NewTransaction> {
-  final titleController = TextEditingController();
-  final amountController = TextEditingController();
+  final _titleController = TextEditingController();
+  final _amountController = TextEditingController();
+  final _dateController = TextEditingController();
+
+  void _selectDate(BuildContext context) async {
+    final now = DateTime.now();
+    final datePicked = await showDatePicker(
+        context: context,
+        initialDate: now,
+        firstDate: DateTime(now.year - 1),
+        lastDate: DateTime(now.year + 1));
+
+    if (datePicked != null) {
+      _dateController.text = DateFormat('dd/MM/yyyy').format(datePicked);
+    } 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,30 +40,40 @@ class _NewTransactionState extends State<NewTransaction> {
           children: <Widget>[
             TextField(
               decoration: InputDecoration(labelText: 'Title'),
-              controller: titleController,
+              controller: _titleController,
             ),
             TextField(
               decoration: InputDecoration(labelText: 'Amount'),
-              controller: amountController,
+              controller: _amountController,
               keyboardType: TextInputType.number,
+            ),
+            InkWell(
+              onTap: () => _selectDate(context),
+              child: IgnorePointer(
+                child: TextField(
+                  decoration: InputDecoration(labelText: 'Date'),
+                  controller: _dateController,
+                ),
+              ),
             ),
             FlatButton(
               onPressed: () {
-                if (titleController.text.isEmpty ||
-                    amountController.text.isEmpty) {
+                if (_titleController.text.isEmpty ||
+                    _amountController.text.isEmpty ||
+                    _dateController.text.isEmpty) {
                   Flushbar(
-                    message: 'Title and Amount could not be empty!',
+                    message: 'Title, Amount and Date could not be empty!',
                     backgroundColor: Colors.red,
                     duration: Duration(seconds: 3),
                   ).show(context);
                   return;
                 }
                 widget._addHandler(
-                    titleController.text, double.parse(amountController.text));
+                    _titleController.text, double.parse(_amountController.text), DateFormat('dd/MM/yyyy').parse(_dateController.text));
               },
               child: Text(
                 'Add transaction',
-                style: TextStyle(color: Colors.purple),
+                style: TextStyle(color: Theme.of(context).accentColor),
               ),
             )
           ],

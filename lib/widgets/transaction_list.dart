@@ -15,8 +15,13 @@ class TransactionList extends StatelessWidget {
       child: _transactions.isEmpty
           ? Column(
               children: <Widget>[
-                Text('You have no transactions!', style: Theme.of(context).textTheme.title,),
-                SizedBox(height: 20,),
+                Text(
+                  'You have no transactions!',
+                  style: Theme.of(context).textTheme.title,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
                 Container(
                   height: 200,
                   child: Image.asset(
@@ -29,39 +34,24 @@ class TransactionList extends StatelessWidget {
           : ListView(
               children: _transactions
                   .map((t) => Card(
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 15),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 2, color: Colors.purple)),
-                              padding: EdgeInsets.all(10),
-                              child: Text(
-                                '\$${t.amount}',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.purple),
-                              ),
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  t.title,
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(DateFormat('dd/MM/yyyy').format(t.date))
-                              ],
-                            )
-                          ],
+                    margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                      elevation: 5,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            radius: 30,
+                            child: Padding(
+                                padding: EdgeInsets.all(5),
+                                child: FittedBox(
+                                  child:
+                                      Text('\$${t.amount.toStringAsFixed(2)}'),
+                                )),
+                          ),
+                          title: Text(t.title, style: Theme.of(context).textTheme.title,),
+                          subtitle: Text(DateFormat('dd/MM/yyyy').format(t.date)),
                         ),
-                      ))
+                      )))
                   .toList()),
     );
   }

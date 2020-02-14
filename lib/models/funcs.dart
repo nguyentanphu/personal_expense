@@ -1,1 +1,1 @@
-typedef VoidStringDoubleFunc = void Function(String, double);
+typedef VoidStringDoubleDateFunc = void Function(String, double, DateTime);

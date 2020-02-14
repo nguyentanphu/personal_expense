@@ -15,7 +15,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.cyan,
-        accentColor: Colors.amber
+        accentColor: Colors.amber,
+        textTheme: ThemeData.light().textTheme.copyWith(
+          button: TextStyle(color: Colors.deepOrange)
+        )
       ),
       title: 'Personal expense',
       home: MyHomePage(),
@@ -49,12 +52,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final _chartModel = ChartModel();
 
-  void addNewTransaction(String title, double amount) {
+  void addNewTransaction(String title, double amount, DateTime date) {
     final newTransaction = Transaction(
         id: DateTime.now().toIso8601String(),
         title: title,
         amount: amount,
-        date: DateTime.now());
+        date: date);
 
     setState(() {
       _transactions.add(newTransaction);
