@@ -33,16 +33,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [
-    Transaction(
-        id: 't1', title: 'Buy grocery', amount: 10, date: DateTime.now()),
-    Transaction(
-        id: 't2', title: 'Go to wedding', amount: 50, date: DateTime.now().subtract(Duration(days: 1))),
-    Transaction(
-        id: 't3', title: 'Buy toys', amount: 20.22, date: DateTime.now().subtract(Duration(days: 1))),
-    Transaction(
-        id: 't4', title: 'Meeting with christ Pho', amount: 30, date: DateTime.now().subtract(Duration(days: 4))),
-    Transaction(
-        id: 't5', title: 'Go to wedding', amount: 59.55, date: DateTime.now().subtract(Duration(days: 5))),
+
   ];
 
   List<Transaction> get _recent7DaysTransaction {
@@ -69,6 +60,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void startAddNewTransaction(BuildContext context) {
     showModalBottomSheet(
         context: context,
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
+        isScrollControlled: true,
         builder: (_) {
           return NewTransaction(addNewTransaction);
         });
@@ -76,8 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    final appBar = AppBar(
         title: Text('Personal expense'),
         actions: <Widget>[
           IconButton(
@@ -87,12 +81,21 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           )
         ],
-      ),
+      );
+
+    return Scaffold(
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Chart(_chartModel.generateChartData(_recent7DaysTransaction)),
-            TransactionList(_transactions),
+            Container(
+              height: MediaQuery.of(context).size.height*0.35 - appBar.preferredSize.height - MediaQuery.of(context).padding.top,
+              child: Chart(_chartModel.generateChartData(_recent7DaysTransaction)),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height*0.65,
+              child: TransactionList(_transactions),
+            )
           ],
         ),
       ),

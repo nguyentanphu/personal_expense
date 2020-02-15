@@ -27,7 +27,7 @@ class Chart extends StatelessWidget {
                       child: ChartBar(
                         label: c.dateLabel,
                         amount: c.amount,
-                        percentage: c.amount / _totalSpending,
+                        percentage: _totalSpending == 0 ? 0 : c.amount / _totalSpending,
                       )),
                 )
                 .toList()),
